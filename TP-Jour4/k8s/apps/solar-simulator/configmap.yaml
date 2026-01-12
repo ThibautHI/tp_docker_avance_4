@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: solar-simulator-config
+  namespace: solar-monitoring
+  labels:
+    app: solar-simulator
+data:
+  PORT: "3000"
+  DATA_PATH: "/data"
+  UPDATE_INTERVAL_MS: "60000"
+  LOG_LEVEL: "info"
+  NODE_ENV: "production"

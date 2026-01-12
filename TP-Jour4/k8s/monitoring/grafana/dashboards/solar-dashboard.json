@@ -1,0 +1,134 @@
+{
+    "dashboard": {
+        "title": "Solar Farm Monitoring",
+        "tags": [
+            "solar",
+            "energy"
+        ],
+        "timezone": "browser",
+        "refresh": "5s",
+        "panels": [
+            {
+                "id": 1,
+                "gridPos": {
+                    "x": 0,
+                    "y": 0,
+                    "w": 12,
+                    "h": 8
+                },
+                "type": "graph",
+                "title": "Production par Ferme (kW)",
+                "targets": [
+                    {
+                        "expr": "solar_power_production_kw",
+                        "legendFormat": "{{ farm }}"
+                    }
+                ],
+                "yaxes": [
+                    {
+                        "format": "watt"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "gridPos": {
+                    "x": 12,
+                    "y": 0,
+                    "w": 12,
+                    "h": 8
+                },
+                "type": "graph",
+                "title": "Température Panneaux (°C)",
+                "targets": [
+                    {
+                        "expr": "solar_panel_temperature_celsius",
+                        "legendFormat": "{{ farm }}"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "gridPos": {
+                    "x": 0,
+                    "y": 8,
+                    "w": 8,
+                    "h": 8
+                },
+                "type": "stat",
+                "title": "Énergie Totale (kWh)",
+                "targets": [
+                    {
+                        "expr": "sum(solar_total_energy_kwh)"
+                    }
+                ],
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "kwatth"
+                    }
+                }
+            },
+            {
+                "id": 4,
+                "gridPos": {
+                    "x": 8,
+                    "y": 8,
+                    "w": 8,
+                    "h": 8
+                },
+                "type": "stat",
+                "title": "Revenus Totaux (€)",
+                "targets": [
+                    {
+                        "expr": "sum(solar_total_revenue_eur)"
+                    }
+                ],
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "currencyEUR"
+                    }
+                }
+            },
+            {
+                "id": 5,
+                "gridPos": {
+                    "x": 16,
+                    "y": 8,
+                    "w": 8,
+                    "h": 8
+                },
+                "type": "gauge",
+                "title": "Rendement Moyen (%)",
+                "targets": [
+                    {
+                        "expr": "avg(solar_efficiency_percent)"
+                    }
+                ],
+                "fieldConfig": {
+                    "defaults": {
+                        "unit": "percent",
+                        "min": 0,
+                        "max": 100
+                    }
+                }
+            },
+            {
+                "id": 6,
+                "gridPos": {
+                    "x": 0,
+                    "y": 16,
+                    "w": 24,
+                    "h": 8
+                },
+                "type": "table",
+                "title": "Anomalies par Ferme",
+                "targets": [
+                    {
+                        "expr": "sum(solar_anomaly_count) by (farm, type)",
+                        "format": "table"
+                    }
+                ]
+            }
+        ]
+    }
+}

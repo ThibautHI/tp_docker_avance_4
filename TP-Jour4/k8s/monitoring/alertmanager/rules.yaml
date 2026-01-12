@@ -1,0 +1,68 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: solar-alerts
+  namespace: monitoring
+  labels:
+    app: solar-monitoring
+    release: prometheus
+spec:
+  groups:
+  - name: solar_alerts
+    interval: 30s
+    rules:
+
+    # Alerte 1 : Surchauffe panneau (> 65°C pendant 10 min)
+    - alert: SolarPanelOverheating
+      expr: solar_panel_temperature_celsius > 65
+      for: 10m
+      labels:
+        severity: critical
+        component: panel
+      annotations:
+        summary: "Panneau en surchauffe sur {{ $labels.farm }}"
+        description: "Le panneau de la ferme {{ $labels.farm }} dépasse 65°C ({{ $value }}°C)"
+
+    # Alerte 2 : Panne onduleur (status = 0)
+    - alert: SolarInverterDown
+      expr: solar_inverter_status == 0
+      for: 1m
+      labels:
+        severity: critical
+        component: inverter
+      annotations:
+        summary: "Onduleur hors service"
+        description: "L'onduleur {{ $labels.inverter }} de la ferme {{ $labels.farm }} est hors service"
+
+    # Alerte 3 : Production anormalement basse (< 50% du théorique)
+    - alert: SolarLowProduction
+      expr: solar_efficiency_percent < 50
+      for: 15m
+      labels:
+        severity: warning
+        component: production
+      annotations:
+        summary: "Production anormalement basse sur {{ $labels.farm }}"
+        description: "La ferme {{ $labels.farm }} produit moins de 50% de sa capacité ({{ $value }}%)"
+
+    # Alerte 4 : Perte de données capteur (absence > 5 min)
+    - alert: SolarDataLoss
+      expr: absent(solar_power_production_kw) == 1
+      for: 5m
+      labels:
+        severity: warning
+        component: sensor
+      annotations:
+        summary: "Perte de données capteur"
+        description: "Aucune donnée reçue depuis 5 minutes"
+
+    # Alerte 5 : SLO breach - Disponibilité < 99.5%
+    - alert: SolarSLOBreach
+      expr: (1 - (sum(up{job="solar-simulator"}) / count(up{job="solar-simulator"}))) * 100 > 0.5
+      for: 10m
+      labels:
+        severity: critical
+        component: availability
+      annotations:
+        summary: "SLO breach - Disponibilité insuffisante"
+        description: "La disponibilité est en dessous de 99.5%"

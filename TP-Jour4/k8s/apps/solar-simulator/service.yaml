@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: solar-simulator
+  namespace: solar-monitoring
+  labels:
+    app: solar-simulator
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 3000
+  selector:
+    app: solar-simulator
