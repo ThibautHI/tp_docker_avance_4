@@ -21,9 +21,5 @@ cd Master-M2-FullStack/TP-Jour4
 cat README.md
 ```
 
-## User argoCD
-User : Admin
-Password : kcSI9qlT2zDBHZzg
-
 ---
 **Formateur** : Ayoub Benhamdi | **Formation** : Master 2 Full Stack | **Année** : 2025-2026
